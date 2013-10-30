@@ -1,0 +1,9 @@
+{
+  "name": "azure-demo",
+  "dependencies": {
+    "dojo" : "dojo/dojo",
+    "dijit": "dojo/dijit",
+    "dojox": "dojo/dojox",
+    "util" : "dojo/util"
+  }
+}

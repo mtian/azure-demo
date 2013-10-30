@@ -1,0 +1,4 @@
+.fixUploader .dijitToggleButtonIconChar, .dijitOffScreen { display: none; }
+
+
+body .dijitToggleButtonIconChar { display: none;}
