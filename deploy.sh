@@ -30,6 +30,7 @@ SCRIPT_DIR="${BASH_SOURCE[0]%\\*}"
 SCRIPT_DIR="${SCRIPT_DIR%/*}"
 ARTIFACTS=$SCRIPT_DIR/../artifacts
 KUDU_SYNC_CMD=${KUDU_SYNC_CMD//\"}
+BOWER_CMD=${BOWER_CMD//\"}
 
 if [[ ! -n "$DEPLOYMENT_SOURCE" ]]; then
   DEPLOYMENT_SOURCE=$SCRIPT_DIR
@@ -61,6 +62,21 @@ if [[ ! -n "$KUDU_SYNC_CMD" ]]; then
   else
     # In case we are running on kudu service this is the correct location of kuduSync
     KUDU_SYNC_CMD="$APPDATA/npm/node_modules/kuduSync/bin/kuduSync"
+  fi
+fi
+
+if [[ ! -n "$BOWER_CMD" ]]; then
+  # Install bower
+  echo Installing bower
+  npm  install bower -g --silent
+  exitWithMessageOnError "npm failed to install bower"
+
+  if [[ ! -n "$KUDU_SERVICE" ]]; then
+    # In case we are running locally this is the correct location of kuduSync
+    BOWER_CMD="bower"
+  else
+    # In case we are running on kudu service this is the correct location of kuduSync
+    BOWER_CMD="c:/DWASFiles/Sites/animated-octo/AppData/npm/node_modules/bower/bin/bower"
   fi
 fi
 
@@ -114,6 +130,14 @@ if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
   cd "$DEPLOYMENT_TARGET"
   eval $NPM_CMD install --production
   exitWithMessageOnError "npm failed"
+  cd - > /dev/null
+fi
+
+# 4. Install bower packages
+if [ -e "$DEPLOYMENT_TARGET/bower.json" ]; then
+  cd "$DEPLOYMENT_TARGET"
+  eval $BOWER_CMD install --production
+  exitWithMessageOnError "bower failed"
   cd - > /dev/null
 fi
 
