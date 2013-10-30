@@ -76,7 +76,7 @@ if [[ ! -n "$BOWER_CMD" ]]; then
     BOWER_CMD="bower"
   else
     # In case we are running on kudu service this is the correct location of kuduSync
-    BOWER_CMD="$APPDATA/npm/node_modules/bower/bin/bower"
+    BOWER_CMD="\"$APPDATA\"/npm/node_modules/bower/bin/bower"
   fi
 fi
 
