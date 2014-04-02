@@ -53,7 +53,7 @@ fi
 if [[ ! -n "$KUDU_SYNC_CMD" ]]; then
   # Install kudu sync
   echo Installing Kudu Sync
-  npm install kudusync -g --silent
+  npm install kudusync -g
   exitWithMessageOnError "npm failed"
 
   if [[ ! -n "$KUDU_SERVICE" ]]; then
@@ -68,14 +68,14 @@ fi
 if [[ ! -n "$BOWER_CMD" ]]; then
   # Install bower
   echo Installing bower
-  npm  install bower -g --silent
+  npm  install bower -g
   exitWithMessageOnError "npm failed to install bower"
 
   if [[ ! -n "$KUDU_SERVICE" ]]; then
-    # In case we are running locally this is the correct location of kuduSync
+    # In case we are running locally this is the correct location of bower
     BOWER_CMD="bower"
   else
-    # In case we are running on kudu service this is the correct location of kuduSync
+    # In case we are running on kudu service this is the correct location of bower
     BOWER_CMD="\"$APPDATA\"/npm/node_modules/bower/bin/bower"
   fi
 fi
