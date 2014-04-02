@@ -64,13 +64,6 @@ selectNodeVersion
 # Prerequisites
 # -------------
 
-# Verify node.js installed
-hash node 2>/dev/null
-exitWithMessageOnError "Missing node.js executable, please install node.js, if already installed make sure it can be reached from current environment."
-
-# Setup
-# -----
-
 SCRIPT_DIR="${BASH_SOURCE[0]%\\*}"
 SCRIPT_DIR="${SCRIPT_DIR%/*}"
 ARTIFACTS=$SCRIPT_DIR/../artifacts
@@ -98,7 +91,7 @@ fi
 if [[ ! -n "$KUDU_SYNC_CMD" ]]; then
   # Install kudu sync
   echo Installing Kudu Sync
-  npm install kudusync -g
+  eval $NPM_CMD install kudusync -g
   exitWithMessageOnError "npm failed"
 
   if [[ ! -n "$KUDU_SERVICE" ]]; then
@@ -113,7 +106,7 @@ fi
 if [[ ! -n "$BOWER_CMD" ]]; then
   # Install bower
   echo Installing bower
-  npm  install bower -g
+  eval $NPM_CMD install bower -g
   exitWithMessageOnError "npm failed to install bower"
 
   if [[ ! -n "$KUDU_SERVICE" ]]; then
@@ -136,19 +129,9 @@ fi
 # 4. Install bower packages
 if [ -e "$DEPLOYMENT_TARGET/bower.json" ]; then
   cd "$DEPLOYMENT_TARGET"
+  echo Running bower...
+  echo $BOWER_CMD
   eval $BOWER_CMD install --production
   exitWithMessageOnError "bower failed"
   cd - > /dev/null
 fi
-
-##################################################################################################################################
-
-# Post deployment stub
-if [[ -n "$POST_DEPLOYMENT_ACTION" ]]; then
-  POST_DEPLOYMENT_ACTION=${POST_DEPLOYMENT_ACTION//\"}
-  cd "${POST_DEPLOYMENT_ACTION%\\*}"
-  "$POST_DEPLOYMENT_ACTION"
-  exitWithMessageOnError "post deployment action failed"
-fi
-
-echo "Finished successfully."
